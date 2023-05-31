@@ -1,7 +1,8 @@
 from sentence_transformers import SentenceTransformer, util
 from bs4 import BeautifulSoup
 import requests
-import unicodedata
+import json
+
 url_aftonbladet  ="https://rss.aftonbladet.se/rss2/small/pages/sections/senastenytt/"
 url_svt = "https://www.svt.se/nyheter/rss.xml"
 url_svd = "https://www.svd.se/?service=rss"
@@ -12,27 +13,33 @@ model = SentenceTransformer("KBLab/sentence-bert-swedish-cased")
 def get_data(url):
     xml = requests.get(url)
     soup = BeautifulSoup(xml.content, features="xml")
-
     items = soup.find_all("item")
-
-    list_aftonbladet = {}
+    list_news = {}
     counter =0
     for item in items:
         counter += 1
-        if counter == 1000:
+        if counter == 10:
             break
         description = item.find("description").text
-        if "<p>" in description or "</p>" in description:
+        #Vissa premium artiklar ger en tom " " sträng i description, från aftonbladet.
+        if description ==" " or "PLUS" in description:
+            continue
+        if "<p>" in description or "</p>":
+            #Ta bort den där symbolen från aftonbladet
             description = description.replace("<p>", "")
             description = description.replace("</p>", "")
+        if url == url_aftonbladet:
+            #Ta bort den där symbolen från aftonbladet
+            description = description[2:]
+        list_news[item.find("title").text]=([description,item.find("link").text])
+    write_txt(list_news)
+    return list_news
 
-        if description.isascii() == False:
-            description = (ch for ch in description
-                if unicodedata.name(ch).startswith(('LATIN', 'DIGIT', 'SPACE')))
-            description = ''.join(description)
-  
-        list_aftonbladet[item.find("title").text]=([description,item.find("link").text])
-    return list_aftonbladet
+def write_txt(data):
+    with open('data.txt', 'w') as convert_file:
+        convert_file.write(json.dumps(data) + "\n")
+
+    
 
 def compare_data(url_list):
     aftonbladet_data = get_data(url_list[0])
@@ -66,3 +73,4 @@ main(list_url)
 # #Output the pairs with their score
 # for i in range(len(sentences1)):
 #     print("{} \t\t {} \t\t Score: {:.4f}".format(sentences1[i], sentences2[i], cosine_scores[i][i]))
+
