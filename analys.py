@@ -1,8 +1,9 @@
 from sentence_transformers import SentenceTransformer, util
 from bs4 import BeautifulSoup
 import requests
+import io
 import json
-
+import codecs
 url_aftonbladet  ="https://rss.aftonbladet.se/rss2/small/pages/sections/senastenytt/"
 url_svt = "https://www.svt.se/nyheter/rss.xml"
 url_svd = "https://www.svd.se/?service=rss"
@@ -18,11 +19,12 @@ def get_data(url):
     counter =0
     for item in items:
         counter += 1
-        if counter == 10:
+        if counter == 3:
             break
         description = item.find("description").text
         #Vissa premium artiklar ger en tom " " sträng i description, från aftonbladet.
-        if description ==" " or "PLUS" in description:
+        #Samt somliga direktrapporteringar från svd
+        if description ==" " or "PLUS" in description or "SvD:s liverapport om Rysslands invasion av Ukraina" in description:
             continue
         if "<p>" in description or "</p>":
             #Ta bort den där symbolen från aftonbladet
@@ -32,24 +34,33 @@ def get_data(url):
             #Ta bort den där symbolen från aftonbladet
             description = description[2:]
         list_news[item.find("title").text]=([description,item.find("link").text])
-    write_txt(list_news)
+    write_file(list_news)
     return list_news
 
-def write_txt(data):
-    with open('data.txt', 'w') as convert_file:
-        convert_file.write(json.dumps(data) + "\n")
+def write_file(data):
+    with open("data.txt", "a", encoding="utf-8") as file:
+        # Convert the dictionary to a JSON string
+        json_data = json.dumps(data, ensure_ascii=False)
+        # Write the JSON string to the file
+        file.write(json_data)
+        file.write("\n")
 
+    #read_file()
+
+def read_file():
+    # Open the file in read mode with UTF-8 encoding
+    with open("data.txt", "r", encoding="utf-8") as file:
+        # Read the contents of the file
+        file_contents = file.read()
     
+    # Clear the file by opening it in write mode and truncating its content
+    with open("data.txt", "w", encoding="utf-8") as file:
+        file.write("")
 
 def compare_data(url_list):
     aftonbladet_data = get_data(url_list[0])
     svt_data = get_data(url_list[1])
     svd_data = get_data(url_list[2])
-    print(aftonbladet_data)
-    print("\n")
-    print(svt_data)
-    print("\n")
-    print(svd_data)
 
 def main(url):
     compare_data(url)
