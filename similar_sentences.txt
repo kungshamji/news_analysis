@@ -1,0 +1,8 @@
+Similarity Score: 0.85
+Sentence 1 (SVT): Hamas har genomfört en massiv raketattack från Gazaremsan mot Israel och meddelat att man startar en ny militäroperation. Flyglarmen ljuder under lördagsmorgonen på flera platser, bland annat Tel Aviv och Jerusalem.
+– Enligt uppgifter är det flera israeler som dödats och runt hundra som har skadats, säger SVT:s Mellanösternkorrespondent Samir Abu Eid, ståendes på Olivberget, en ås öster om gamla Jerusalem.
+Link 1: https://www.svt.se/nyheter/utrikes/svt-s-samir-abu-eid-overraskat-israeliska-sakerhetsetablissemanget
+Sentence 2 (SVT): Den terrorstämplade islamistgruppen Hamas har genomfört omfattande raketbeskjutning mot Tel Aviv och andra håll och tagit sig in i Israel med bland annat jeepar. Israels försvarsstyrka har under lördagsmorgonen ”förklarat krigstillstånd”.
+– Det är kaos, totalt kaos i Israel, säger Anders Persson, statsvetare vid Linnéuniviersitetet som just nu befinner sig i Jerusalem, till SVT Nyheter.
+Link 2: https://www.svt.se/nyheter/utrikes/svenske-statsvetaren-pa-plats-i-jerusalem-det-ar-kaos
+

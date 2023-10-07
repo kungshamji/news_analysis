@@ -1,7 +1,4 @@
-thisdict = {
-  "brand": "Ford",
-  "model": ["Mustang"],
-  "year": 1964
-}
+lists = [(0,1), ("hets", "Jada")]
 
-print(thisdict.values())
+for x in lists:
+    print(x[0])
